@@ -1,9 +1,6 @@
 // import question from './new_question_data'
 
-
-
-
-// var a = require('indefinite');
+var a = require('indefinite');
 const adjectives_of_person = [
     "adaptable",
     "adventurous",
@@ -39,7 +36,6 @@ const adjectives_of_person = [
     "energetic",
     "enthusiastic",
     "exuberant",
-    "",
     "fair-minded",
     "faithful",
     "fearless",
@@ -106,33 +102,39 @@ const adjectives_of_person = [
     "willing",
     "witty"
 ]
-
-// for (let i=0;i<100;i++){
-//     questions.push(`Who seems to be ${a(adjectives_of_person[i])} person ?`)
-// }
-// console.log(questions)
-
-
-
-
-
-
-
-
-
-
-
-
-
-var chance = require('chance')
 var a = require('indefinite')
-c = new chance()
-var q=[]
-console.log(c.profession())
+questions=[]
 for (let i=0;i<100;i++){
-    q.push(`Who seems to work as ${a(c.profession())} ?`)
+    try {
+        questions.push(`Who looks like ${a(adjectives_of_person[i])} person ?`)
+    } catch (error) {
+        console.log(error)
+    }
+    
 }
-console.log(q)
+console.log(questions)
+
+
+
+
+
+
+
+
+
+
+
+
+
+// var chance = require('chance')
+// var a = require('indefinite')
+// c = new chance()
+// var q=[]
+// console.log(c.profession())
+// for (let i=0;i<100;i++){
+//     q.push(`Who seems to work as ${a(c.profession())} ?`)
+// }
+// console.log(q)
 
 
 
