@@ -73,7 +73,6 @@ const Mainpage = () => {
         const ref = firebase.database().ref('data').child(qNo);
         ref.on('value', (snapshot) => {
             const all = snapshot.val();
-            console.log('ud',qNo)
             setVotes(all.votes)
             setData(all);
             setImages(all.images)
