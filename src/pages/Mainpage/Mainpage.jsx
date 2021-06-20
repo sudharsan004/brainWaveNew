@@ -39,7 +39,7 @@ const Mainpage = () => {
         var secondsUntilEndOfDate = 24 * 60 * 60 - h * 60 * 60 - m * 60 - s;
         var questionNo = Math.trunc(secondsUntilEndOfDate / 30)
         var remainder = (secondsUntilEndOfDate % 30)
-        // questionNo = (questionNo*h*d.getDate()) % 3000
+        questionNo = (questionNo*h*d.getDate()) % 3000
         return [questionNo, remainder]
     }
 
@@ -132,7 +132,7 @@ const Mainpage = () => {
             if (counter === 0) {
                 setClick(false)
             }
-            if (counter === 5) {
+            if (counter <= 5) {
                 if (click === true) {
                     updateData()
                     setSum(votes.reduce((a,b)=>{
