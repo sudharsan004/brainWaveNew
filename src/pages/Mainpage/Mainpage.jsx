@@ -39,7 +39,12 @@ const Mainpage = () => {
         var secondsUntilEndOfDate = 24 * 60 * 60 - h * 60 * 60 - m * 60 - s;
         var questionNo = Math.trunc(secondsUntilEndOfDate / 30)
         var remainder = (secondsUntilEndOfDate % 30)
-        questionNo = (questionNo*h*d.getDate()) % 3000
+        if(h===0){
+        questionNo = (questionNo*d.getUTCDate()) % 3000}
+        else{
+        questionNo = (questionNo*h*d.getUTCDate()) % 3000
+    }
+      
         return [questionNo, remainder]
     }
 
