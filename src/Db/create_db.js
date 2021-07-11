@@ -2571,7 +2571,7 @@ const image = [
     "male_25_7e1dcc59073212fcdde8541f9d6c003df3d33319.jpg",
     "male_45_1880ffdbd318786630b35a1bb974a6cc81cc9bd1.jpg",
 ]
-
+// TODO: add logic that the images should not be same
 var b = []
 for (i = 0; i < 3000; i++) {
     var item = `{

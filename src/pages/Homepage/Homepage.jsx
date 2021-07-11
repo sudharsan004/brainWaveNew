@@ -18,7 +18,7 @@ const Homepage = () => {
                 <div className={HomepageCSS.imgdiv} style={{animationPlayState: !loaded && 'paused',display: !loaded &&  'none'}}>
                     <img src={logo} alt="logo" onLoad={onLoadHandler} className={HomepageCSS.img} draggable="false" />
                 </div>
-                <h1 className={HomepageCSS.h1}>Brain Wave</h1>
+                <h1 className={HomepageCSS.h1}>JUDGYFACE</h1>
                 
                 <Link to={`${name ? '/main' : '/name'}`}>
                     <button className={`btn btn-primary ${HomepageCSS.btn}`}>Get Started</button>

@@ -11,7 +11,7 @@ const Mainpage = () => {
     // State for Counter
     const [counter, setCounter] = useState('')
     const [selectedImgColor, setSelectedImgColor] = useState(["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"])
-    const [msg, setMsg] = useState('Brain Wave');
+    const [msg, setMsg] = useState('JUDGYFACE');
     const [data, setData] = useState([])
     const [images, setImages] = useState([])
     const [votes, setVotes] = useState([0, 0, 0, 0])
@@ -128,7 +128,7 @@ const Mainpage = () => {
         }
         else {
             if (counter === 29) {
-                setMsg('BRAIN WAVE')
+                setMsg('JUDGYFACE')
                 setDisplay([0, 0, 0, 0])
                 updateData()
                 setSelected(false)
