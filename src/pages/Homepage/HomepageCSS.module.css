@@ -15,8 +15,10 @@
   padding: 90px;
   border-radius: 42px;
   background: #eeeeee;
-  -webkit-box-shadow: 8px 8px 21px #cfcfcf, -8px -8px 21px #ffffff;
-          box-shadow: 8px 8px 21px #cfcfcf, -8px -8px 21px #ffffff;
+  -webkit-box-shadow: 8px 8px 21px #cfcfcf,
+ -8px -8px 21px #ffffff;
+          box-shadow: 8px 8px 21px #cfcfcf,
+ -8px -8px 21px #ffffff;
   border: none;
 }
 
@@ -24,8 +26,10 @@
   border-radius: 149px;
   border-radius: 50%;
   background: #eeeeee;
-  -webkit-box-shadow: 10px 10px 21px #cfcfcf, -10px -10px 21px #ffffff;
-          box-shadow: 10px 10px 21px #cfcfcf, -10px -10px 21px #ffffff;
+  -webkit-box-shadow: 10px 10px 21px #cfcfcf,
+ -10px -10px 21px #ffffff;
+          box-shadow: 10px 10px 21px #cfcfcf,
+ -10px -10px 21px #ffffff;
   width: 125px;
   height: 125px;
   position: relative;
@@ -170,7 +174,8 @@
 }
 
 .container .card .btn {
-  background-color: #00D6C1;
+  background-color: #b48750;
+  background-color: #8a5e33;
   border: none;
   border-radius: 50px;
   padding: 10px 50px;
@@ -188,7 +193,7 @@
 
 .container .card .btn:hover, .container .card .btn:focus-visible, .container .card .btn:focus {
   outline: none;
-  background-color: #00ceb9;
+  background-color:#b97747 ;
 }
 
 @-webkit-keyframes fade-in {

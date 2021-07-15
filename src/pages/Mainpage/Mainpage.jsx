@@ -15,11 +15,12 @@ const Mainpage = () => {
     const [data, setData] = useState([])
     const [images, setImages] = useState([])
     const [votes, setVotes] = useState([0, 0, 0, 0])
+    const [selectedImgNo,setSelectedImgNo]=useState('')
+    const [dbvotes, setdbvotes] = useState([0, 0, 0, 0])
     const [display, setDisplay] = useState([0, 0, 0, 0])
     const [selected, setSelected] = useState(false)
     const [click, setClick] = useState(false)
     const [sum,setSum] = useState(0);
-
     const initial = useRef(true);
 
     
@@ -37,8 +38,8 @@ const Mainpage = () => {
         var m = d.getUTCMinutes();
         var s = d.getUTCSeconds();
         var secondsUntilEndOfDate = 24 * 60 * 60 - h * 60 * 60 - m * 60 - s;
-        var questionNo = Math.trunc(secondsUntilEndOfDate / 30)
-        var remainder = (secondsUntilEndOfDate % 30)
+        var questionNo = Math.trunc(secondsUntilEndOfDate / 20)
+        var remainder = (secondsUntilEndOfDate % 20)
         if(h===0){
         questionNo = (questionNo*d.getUTCDate()) % 3000}
         else{
@@ -67,6 +68,7 @@ const Mainpage = () => {
             const all = snapshot.val();
             // console.log(all)
             setVotes(all.votes)
+            setdbvotes(all.votes)
             setData(all);
             setImages(all.images)
         });
@@ -79,6 +81,8 @@ const Mainpage = () => {
         ref.on('value', (snapshot) => {
             const all = snapshot.val();
             setVotes(all.votes)
+            // console.log('t',all.votes)
+            setdbvotes(all.votes)
             setData(all);
             setImages(all.images)
         });
@@ -94,15 +98,29 @@ const Mainpage = () => {
 
     // when user selects an image
     function handleClick(e) {
-        if (!selected) {
+        // if selecting for first time i,e new image
+        // if (!selected) {
+        //     var target = e.target
+        //     var img_no = target.alt
+        //     setSelectedImgColor(p => { p[img_no] = "#a6bef7"; return p })
+        //     setSelected(true)
+        //     setMsg("result in last 5 Secs");
+        //     setVotes(prev => { prev[img_no] += 1; return prev })
+        //     setClick(true)
+        // }
+        // // selecting another image
+        // else{
             var target = e.target
             var img_no = target.alt
-            setSelectedImgColor(p => { p[img_no] = "#a6bef7"; return p })
+            setSelectedImgNo(img_no)
+            var colors=["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"]
+            // var votes =[0,0,0,0]
+            setSelectedImgColor(()=>{colors[img_no]="#a6bef7";return colors})
             setSelected(true)
             setMsg("result in last 5 Secs");
-            setVotes(prev => { prev[img_no] += 1; return prev })
+            // setdbvotes(() => { votes[img_no] += 1; return votes })
             setClick(true)
-        }
+        // }
     }
 
     // trigger update database when user selects an image
@@ -112,7 +130,7 @@ const Mainpage = () => {
         }
         else {
             if (click === true) {
-                updateDataBase()  
+                // updateDataBase()  
                 setSum(votes.reduce((a,b)=>{
                     return (a+b)
                 },0))
@@ -127,7 +145,7 @@ const Mainpage = () => {
             initial.current = false;
         }
         else {
-            if (counter === 29) {
+            if (counter === 19) {
                 setMsg('JUDGYFACE')
                 setDisplay([0, 0, 0, 0])
                 updateData()
@@ -136,16 +154,24 @@ const Mainpage = () => {
             if (counter === 0) {
                 setClick(false)
             }
+            if (counter === 6){
+                console.log(selectedImgNo)
+                setVotes(prev => { prev[selectedImgNo] += 1; return prev })
+            }
             if (counter <= 5) {
                 if (click === true) {
-                    updateData()
+                    // setVotes(dbvotes)
+                    updateDataBase()
+                    // updateData()
+                    console.log(votes)
                     setSum(votes.reduce((a,b)=>{
                         return (a+b)
                     },0))
                     setSelectedImgColor(["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"])
                     setDisplay(votes)
+                    // console.log(dbvotes)
                     setMsg('Result')
-                    updateData()
+                    // updateData()
                 }
             }
         }

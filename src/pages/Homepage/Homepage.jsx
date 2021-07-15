@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import logo from '../../Assets/logo.svg'
+import logo from '../../Assets/logo.png'
 import HomepageCSS from './HomepageCSS.module.css'
 
 const Homepage = () => {
@@ -16,7 +16,7 @@ const Homepage = () => {
         <div className={`container ${HomepageCSS.container}`}>
             <div className={`card ${HomepageCSS.card}`}>
                 <div className={HomepageCSS.imgdiv} style={{animationPlayState: !loaded && 'paused',display: !loaded &&  'none'}}>
-                    <img src={logo} alt="logo" onLoad={onLoadHandler} className={HomepageCSS.img} draggable="false" />
+                    <img src={logo} style={{width:"160px"}} alt="logo" onLoad={onLoadHandler} className={HomepageCSS.img} draggable="false" />
                 </div>
                 <h1 className={HomepageCSS.h1}>JUDGYFACE</h1>
                 
