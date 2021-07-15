@@ -53,10 +53,13 @@ const Mainpage = () => {
     // update the data to the database
     function updateDataBase() {
         var qNo = getCounter()[0]
+        console.log(votes)
+        var v = votes
+        v[selectedImgNo] += 1;
         const ref = firebase.database().ref('data').child(qNo);
         ref.update({
             ...data,
-            "votes": votes
+            "votes": v
         })
     }
 
@@ -146,6 +149,7 @@ const Mainpage = () => {
         }
         else {
             if (counter === 19) {
+                setSelectedImgNo('')
                 setMsg('JUDGYFACE')
                 setDisplay([0, 0, 0, 0])
                 updateData()
@@ -154,15 +158,16 @@ const Mainpage = () => {
             if (counter === 0) {
                 setClick(false)
             }
-            if (counter === 6){
-                console.log(selectedImgNo)
-                setVotes(prev => { prev[selectedImgNo] += 1; return prev })
+            if (counter === 6 && click){
+                // console.log(selectedImgNo)
+                // setVotes(prev => { prev[selectedImgNo] += 1; return prev })
+                updateDataBase()
+                updateData()
             }
             if (counter <= 5) {
                 if (click === true) {
+                    updateData()
                     // setVotes(dbvotes)
-                    updateDataBase()
-                    // updateData()
                     console.log(votes)
                     setSum(votes.reduce((a,b)=>{
                         return (a+b)
