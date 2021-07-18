@@ -18,8 +18,10 @@
 .container .card {
   border-radius: 22px;
   background: #eeeeee;
-  -webkit-box-shadow: 8px 8px 21px #cfcfcf, -8px -8px 21px #ffffff;
-          box-shadow: 8px 8px 21px #cfcfcf, -8px -8px 21px #ffffff;
+  -webkit-box-shadow: 8px 8px 21px #cfcfcf,
+ -8px -8px 21px #ffffff;
+          box-shadow: 8px 8px 21px #cfcfcf,
+ -8px -8px 21px #ffffff;
   border: none;
 }
 
@@ -66,7 +68,7 @@
   font-size: .9rem;
   margin: 10px;
   margin-bottom: 20px;
-  opacity: .6;
+  opacity: .7;
   padding: 10px 0px;
 }
 
@@ -87,8 +89,10 @@
   border-radius: 149px;
   border-radius: 50%;
   background: #eeeeee;
-  -webkit-box-shadow: 10px 10px 21px #cfcfcf, -10px -10px 21px #ffffff;
-          box-shadow: 10px 10px 21px #cfcfcf, -10px -10px 21px #ffffff;
+  -webkit-box-shadow: 10px 10px 21px #cfcfcf,
+ -10px -10px 21px #ffffff;
+          box-shadow: 10px 10px 21px #cfcfcf,
+ -10px -10px 21px #ffffff;
   width: 150px;
   height: 150px;
   position: relative;

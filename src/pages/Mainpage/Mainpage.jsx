@@ -6,6 +6,9 @@ import firebase from '../../utils/firebase'
 import loader from "../../Assets/loader.gif"
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import { FacebookIcon, TwitterIcon } from "react-share";
+import ShareIcon from "@material-ui/icons/Share";
+import Fab from "@material-ui/core/Fab";
+import Zoom from "@material-ui/core/Zoom";
 
 
 const Mainpage = () => {
@@ -20,6 +23,7 @@ const Mainpage = () => {
     const [dbvotes, setdbvotes] = useState([0, 0, 0, 0])
     const [display, setDisplay] = useState([0, 0, 0, 0])
     const [selected, setSelected] = useState(false)
+    const [share, setShare] = useState(false)
     const [click, setClick] = useState(false)
     const [sum, setSum] = useState(0);
     const initial = useRef(true);
@@ -308,24 +312,30 @@ const Mainpage = () => {
                         </div>
                     </div>
                 </div>
-                <p className={MainpageCSS.p}>{msg}
-                    <FacebookShareButton
-                        url={"https://judgyface.com"}
-                        quote={"Judging people"}
-                        hashtag={"#gaming"}
-                        description={"dsc"}
-                        className="share-button"
-                    >
-                        <FacebookIcon size={32} round />
-                    </FacebookShareButton>
-                    <span> </span>
-                    <TwitterShareButton
-                        title={"Judgy Face"}
-                        url={"https://judgyface.com"}
-                        hashtags={["gaming", "judgying"]}
-                    >
-                        <TwitterIcon size={32} round />
-                    </TwitterShareButton></p>
+                <p className={MainpageCSS.p}>{msg + ' '}
+                    {/* <Zoom in={true}> */}
+                    {/* <Fab >  */}
+                    {/* {<ShareIcon onClick={() => { setShare(true) }} />} */}
+                    {/* </Fab> */}
+                    {/* </Zoom> */}
+                    {share ?
+                        (<><FacebookShareButton
+                            url={"https://judgyface.com"}
+                            quote={"Judging people"}
+                            hashtag={"#gaming"}
+                            description={"dsc"}
+                            className="share-button"
+                        >
+                            <FacebookIcon size={32} round />
+                        </FacebookShareButton>
+                            <span> </span>
+                            <TwitterShareButton
+                                title={"Judgy Face"}
+                                url={"https://judgyface.com"}
+                                hashtags={["gaming", "judgying"]}
+                            >
+                                <TwitterIcon size={32} round />
+                            </TwitterShareButton></>) : <ShareIcon size={25} onClick={() => { setShare(true) }} />}</p>
             </div>
         </div>
     )
