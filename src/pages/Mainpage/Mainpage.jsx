@@ -4,7 +4,8 @@ import 'react-circular-progressbar/dist/styles.css'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import firebase from '../../utils/firebase'
 import loader from "../../Assets/loader.gif"
-
+import { FacebookShareButton, TwitterShareButton } from 'react-share';
+import { FacebookIcon, TwitterIcon } from "react-share";
 
 
 const Mainpage = () => {
@@ -15,17 +16,17 @@ const Mainpage = () => {
     const [data, setData] = useState([])
     const [images, setImages] = useState([])
     const [votes, setVotes] = useState([0, 0, 0, 0])
-    const [selectedImgNo,setSelectedImgNo]=useState('')
+    const [selectedImgNo, setSelectedImgNo] = useState('')
     const [dbvotes, setdbvotes] = useState([0, 0, 0, 0])
     const [display, setDisplay] = useState([0, 0, 0, 0])
     const [selected, setSelected] = useState(false)
     const [click, setClick] = useState(false)
-    const [sum,setSum] = useState(0);
+    const [sum, setSum] = useState(0);
     const initial = useRef(true);
 
-    
+
     const imgurl = "https://thumb.fakeface.rest/thumb_"
-   
+
 
     // Local Storage
     var uname = localStorage.getItem('username')
@@ -40,12 +41,13 @@ const Mainpage = () => {
         var secondsUntilEndOfDate = 24 * 60 * 60 - h * 60 * 60 - m * 60 - s;
         var questionNo = Math.trunc(secondsUntilEndOfDate / 20)
         var remainder = (secondsUntilEndOfDate % 20)
-        if(h===0){
-        questionNo = (questionNo*d.getUTCDate()) % 3000}
-        else{
-        questionNo = (questionNo*h*d.getUTCDate()) % 3000
-    }
-      
+        if (h === 0) {
+            questionNo = (questionNo * d.getUTCDate()) % 3000
+        }
+        else {
+            questionNo = (questionNo * h * d.getUTCDate()) % 3000
+        }
+
         return [questionNo, remainder]
     }
 
@@ -113,16 +115,16 @@ const Mainpage = () => {
         // }
         // // selecting another image
         // else{
-            var target = e.target
-            var img_no = target.alt
-            setSelectedImgNo(img_no)
-            var colors=["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"]
-            // var votes =[0,0,0,0]
-            setSelectedImgColor(()=>{colors[img_no]="#a6bef7";return colors})
-            setSelected(true)
-            setMsg("result in last 5 Secs");
-            // setdbvotes(() => { votes[img_no] += 1; return votes })
-            setClick(true)
+        var target = e.target
+        var img_no = target.alt
+        setSelectedImgNo(img_no)
+        var colors = ["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"]
+        // var votes =[0,0,0,0]
+        setSelectedImgColor(() => { colors[img_no] = "#a6bef7"; return colors })
+        setSelected(true)
+        setMsg("result in last 5 Secs");
+        // setdbvotes(() => { votes[img_no] += 1; return votes })
+        setClick(true)
         // }
     }
 
@@ -134,9 +136,9 @@ const Mainpage = () => {
         else {
             if (click === true) {
                 // updateDataBase()  
-                setSum(votes.reduce((a,b)=>{
-                    return (a+b)
-                },0))
+                setSum(votes.reduce((a, b) => {
+                    return (a + b)
+                }, 0))
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -158,7 +160,7 @@ const Mainpage = () => {
             if (counter === 0) {
                 setClick(false)
             }
-            if (counter === 6 && click){
+            if (counter === 6 && click) {
                 // console.log(selectedImgNo)
                 // setVotes(prev => { prev[selectedImgNo] += 1; return prev })
                 updateDataBase()
@@ -169,9 +171,9 @@ const Mainpage = () => {
                     updateData()
                     // setVotes(dbvotes)
                     console.log(votes)
-                    setSum(votes.reduce((a,b)=>{
-                        return (a+b)
-                    },0))
+                    setSum(votes.reduce((a, b) => {
+                        return (a + b)
+                    }, 0))
                     setSelectedImgColor(["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"])
                     setDisplay(votes)
                     // console.log(dbvotes)
@@ -198,7 +200,7 @@ const Mainpage = () => {
                 <span className={MainpageCSS.txtspan}>
                     <h4 className={MainpageCSS.h1}>{data.question}</h4>
                 </span>
-                
+
                 {/* first row of images (0 and 1) */}
                 <div className="row">
                     <div className="col-6">
@@ -306,7 +308,24 @@ const Mainpage = () => {
                         </div>
                     </div>
                 </div>
-                <p className={MainpageCSS.p}>{msg}</p>
+                <p className={MainpageCSS.p}>{msg}
+                    <FacebookShareButton
+                        url={"https://judgyface.com"}
+                        quote={"Judging people"}
+                        hashtag={"#gaming"}
+                        description={"dsc"}
+                        className="share-button"
+                    >
+                        <FacebookIcon size={32} round />
+                    </FacebookShareButton>
+                    <span> </span>
+                    <TwitterShareButton
+                        title={"Judgy Face"}
+                        url={"https://judgyface.com"}
+                        hashtags={["gaming", "judgying"]}
+                    >
+                        <TwitterIcon size={32} round />
+                    </TwitterShareButton></p>
             </div>
         </div>
     )
