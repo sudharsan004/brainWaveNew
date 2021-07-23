@@ -21,6 +21,7 @@ const Mainpage = () => {
     const [votes, setVotes] = useState([0, 0, 0, 0])
     const [selectedImgNo, setSelectedImgNo] = useState('')
     const [dbvotes, setdbvotes] = useState([0, 0, 0, 0])
+    const [qno,setqno]=useState(0)
     const [display, setDisplay] = useState([0, 0, 0, 0])
     const [selected, setSelected] = useState(false)
     const [share, setShare] = useState(false)
@@ -51,24 +52,32 @@ const Mainpage = () => {
         else {
             questionNo = (questionNo * h * d.getUTCDate()) % 3000
         }
-
         return [questionNo, remainder]
     }
 
 
     // update the data to the database
+    // function updateDataBase() {
+    //     var qNo = getCounter()[0]
+    //     console.log(votes)
+    //     var v = votes.slice()
+    //     v[selectedImgNo] += 1;
+    //     const ref = firebase.database().ref('data').child(qNo);
+    //     ref.update({
+    //         ...data,
+    //         "votes": v
+    //     })
+    // }
+
     function updateDataBase() {
         var qNo = getCounter()[0]
-        console.log(votes)
-        var v = votes
-        v[selectedImgNo] += 1;
         const ref = firebase.database().ref('data').child(qNo);
+        console.log(data,votes)
         ref.update({
             ...data,
-            "votes": v
+            "votes": votes
         })
     }
-
     // fetch data - first render
     useEffect(() => {
         var qNo = getCounter()[0]
@@ -108,28 +117,19 @@ const Mainpage = () => {
     // when user selects an image
     function handleClick(e) {
         // if selecting for first time i,e new image
-        // if (!selected) {
-        //     var target = e.target
-        //     var img_no = target.alt
-        //     setSelectedImgColor(p => { p[img_no] = "#a6bef7"; return p })
-        //     setSelected(true)
-        //     setMsg("result in last 5 Secs");
-        //     setVotes(prev => { prev[img_no] += 1; return prev })
-        //     setClick(true)
-        // }
-        // // selecting another image
-        // else{
-        var target = e.target
-        var img_no = target.alt
-        setSelectedImgNo(img_no)
-        var colors = ["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"]
-        // var votes =[0,0,0,0]
-        setSelectedImgColor(() => { colors[img_no] = "#a6bef7"; return colors })
-        setSelected(true)
-        setMsg("result in last 5 Secs");
-        // setdbvotes(() => { votes[img_no] += 1; return votes })
-        setClick(true)
-        // }
+        if (!selected) {
+            var target = e.target
+            var img_no = target.alt
+            var colors = ["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"]
+            setSelectedImgColor(p => { colors[img_no] = "#a6bef7"; return colors })
+            // setSelected(true)
+            setMsg("result in last 5 Secs");
+            console.log(data)
+            var vote = data["votes"].slice()
+            setVotes(prev => { vote[img_no] += 1;console.log(vote); return vote})
+            console.log(data)
+            setClick(true)
+        }
     }
 
     // trigger update database when user selects an image
@@ -162,19 +162,18 @@ const Mainpage = () => {
                 setSelected(false)
             }
             if (counter === 0) {
+                updateDataBase()
                 setClick(false)
             }
-            if (counter === 6 && click) {
-                // console.log(selectedImgNo)
-                // setVotes(prev => { prev[selectedImgNo] += 1; return prev })
-                updateDataBase()
-                updateData()
-            }
+            // if (counter === 6 && click) {
+            //     // console.log(selectedImgNo)
+            //     // setVotes(prev => { prev[selectedImgNo] += 1; return prev })
+            //     // updateDataBase()
+            //     // updateData()
+            // }
             if (counter <= 5) {
                 if (click === true) {
-                    updateData()
-                    // setVotes(dbvotes)
-                    console.log(votes)
+                    // console.log(votes)
                     setSum(votes.reduce((a, b) => {
                         return (a + b)
                     }, 0))
@@ -189,6 +188,20 @@ const Mainpage = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [click, counter])
 
+
+    function prev(){
+        var d = new Date();
+        var h = d.getUTCHours();
+        var m = d.getUTCMinutes();
+        var s = d.getUTCSeconds();
+        var secondsUntilEndOfDate = 24 * 60 * 60 - h * 60 * 60 - m * 60 - s;
+        var questionNo = Math.trunc(secondsUntilEndOfDate / 20)
+        for (let q=1;q<10;q++){
+            console.log(questionNo-q)
+        }
+    }
+    
+    
 
     // JSX
     return (
@@ -326,7 +339,7 @@ const Mainpage = () => {
                             description={"dsc"}
                             className="share-button"
                         >
-                            <FacebookIcon size={32} round />
+                            <FacebookIcon size={25} round />
                         </FacebookShareButton>
                             <span> </span>
                             <TwitterShareButton
@@ -334,7 +347,7 @@ const Mainpage = () => {
                                 url={"https://judgyface.com"}
                                 hashtags={["gaming", "judgying"]}
                             >
-                                <TwitterIcon size={32} round />
+                                <TwitterIcon size={25} round />
                             </TwitterShareButton></>) : <ShareIcon size={25} onClick={() => { setShare(true) }} />}</p>
             </div>
         </div>
