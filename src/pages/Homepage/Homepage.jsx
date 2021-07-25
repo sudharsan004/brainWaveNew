@@ -15,7 +15,8 @@ const Homepage = () => {
     return (
         <div className={`container ${HomepageCSS.container}`}>
             <div className={`card ${HomepageCSS.card}`}>
-                <div className={HomepageCSS.imgdiv} style={{animationPlayState: !loaded && 'paused',display: !loaded &&  'none'}}>
+                {/* <div className={HomepageCSS.imgdiv} style={{animationPlayState: !loaded && 'paused',display: !loaded &&  'none'}}> */}
+                <div className={HomepageCSS.imgdiv} >
                     <img src={logo} style={{width:"160px"}} alt="logo" onLoad={onLoadHandler} className={HomepageCSS.img} draggable="false" />
                 </div>
                 <h1 className={HomepageCSS.h1}>JUDGYFACE</h1>

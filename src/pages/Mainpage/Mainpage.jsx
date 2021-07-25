@@ -7,8 +7,8 @@ import loader from "../../Assets/loader.gif"
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import { FacebookIcon, TwitterIcon } from "react-share";
 import ShareIcon from "@material-ui/icons/Share";
-import Fab from "@material-ui/core/Fab";
-import Zoom from "@material-ui/core/Zoom";
+// import Fab from "@material-ui/core/Fab";
+// import Zoom from "@material-ui/core/Zoom";
 
 
 const Mainpage = () => {
@@ -21,7 +21,7 @@ const Mainpage = () => {
     const [votes, setVotes] = useState([0, 0, 0, 0])
     const [selectedImgNo, setSelectedImgNo] = useState('')
     const [dbvotes, setdbvotes] = useState([0, 0, 0, 0])
-    const [qno,setqno]=useState(0)
+    // const [prevq,setprevq]=useState([])
     const [display, setDisplay] = useState([0, 0, 0, 0])
     const [selected, setSelected] = useState(false)
     const [share, setShare] = useState(false)
@@ -71,20 +71,25 @@ const Mainpage = () => {
 
     function updateDataBase() {
         var qNo = getCounter()[0]
-        const ref = firebase.database().ref('data').child(qNo);
-        console.log(data,votes)
-        ref.update({
-            ...data,
-            "votes": votes
-        })
+        firebase.database().ref('data').child(qNo).child('votes').child(selectedImgNo)
+        .set(firebase.database.ServerValue.increment(1))
+        // ref.on('value',s=>console.log(s.val()))
+
+        // ref.update({
+        //     ...data,
+        //     "votes": votes
+        // })
+        
     }
     // fetch data - first render
     useEffect(() => {
         var qNo = getCounter()[0]
         const ref = firebase.database().ref('data').child(qNo);
+        // const refr = firebase.database().ref('data').child(qNo).child('votes').child('0');
+        // refr.on('value',(s)=>{console.log(s.val())})
         ref.on('value', (snapshot) => {
             const all = snapshot.val();
-            // console.log(all)
+            console.log(all)
             setVotes(all.votes)
             setdbvotes(all.votes)
             setData(all);
@@ -99,7 +104,7 @@ const Mainpage = () => {
         ref.on('value', (snapshot) => {
             const all = snapshot.val();
             setVotes(all.votes)
-            // console.log('t',all.votes)
+            console.log('t',all.votes)
             setdbvotes(all.votes)
             setData(all);
             setImages(all.images)
@@ -111,6 +116,7 @@ const Mainpage = () => {
         setInterval(() => {
             let remainder = getCounter()[1];
             setCounter(remainder);
+            console.log(votes)
         }, 1000)
     }, [])
 
@@ -122,19 +128,32 @@ const Mainpage = () => {
             var img_no = target.alt
             var colors = ["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"]
             setSelectedImgColor(p => { colors[img_no] = "#a6bef7"; return colors })
-            // setSelected(true)
+            
             setMsg("result in last 5 Secs");
-            console.log(data)
-            var vote = data["votes"].slice()
-            setVotes(prev => { vote[img_no] += 1;console.log(vote); return vote})
-            console.log(data)
+            var v =[0,0,0,0]
+            // setVotes(prev => { v[img_no] += 1; return v })
+            setSelectedImgNo(img_no)
+            // updateDataBase()
+
             setClick(true)
         }
     }
 
+    // function handleClick(e) {
+    //     if (!selected) {
+    //         var target = e.target
+    //         var img_no = target.alt
+    //         setSelectedImgColor(p => { p[img_no] = "#a6bef7"; return p })
+    //         setSelected(true)
+    //         setMsg("result in last 5 Secs");
+    //         setVotes(prev => { prev[img_no] += 1; return prev })
+    //         setClick(true)
+    //     }
+    // }
     // trigger update database when user selects an image
     useEffect(() => {
         if (initial.current) {
+            // prev()
             initial.current = false;
         }
         else {
@@ -155,15 +174,16 @@ const Mainpage = () => {
         }
         else {
             if (counter === 19) {
-                setSelectedImgNo('')
+                // setSelectedImgNo('')
                 setMsg('JUDGYFACE')
                 setDisplay([0, 0, 0, 0])
                 updateData()
                 setSelected(false)
             }
             if (counter === 0) {
-                updateDataBase()
                 setClick(false)
+                setVotes([0,0,0,0])
+                // setSelected(false)
             }
             // if (counter === 6 && click) {
             //     // console.log(selectedImgNo)
@@ -171,8 +191,12 @@ const Mainpage = () => {
             //     // updateDataBase()
             //     // updateData()
             // }
+            if(counter ==6 && click){
+                updateDataBase()
+                setSelected(true)
+            }
             if (counter <= 5) {
-                if (click === true) {
+                if (true) {
                     // console.log(votes)
                     setSum(votes.reduce((a, b) => {
                         return (a + b)
@@ -181,7 +205,7 @@ const Mainpage = () => {
                     setDisplay(votes)
                     // console.log(dbvotes)
                     setMsg('Result')
-                    // updateData()
+                    updateData()
                 }
             }
         }
@@ -195,13 +219,21 @@ const Mainpage = () => {
         var m = d.getUTCMinutes();
         var s = d.getUTCSeconds();
         var secondsUntilEndOfDate = 24 * 60 * 60 - h * 60 * 60 - m * 60 - s;
-        var questionNo = Math.trunc(secondsUntilEndOfDate / 20)
+        var questionNos=[ ]
         for (let q=1;q<10;q++){
-            console.log(questionNo-q)
+        secondsUntilEndOfDate+=20
+        var questionNo = Math.trunc(secondsUntilEndOfDate / 20)
+        if (h === 0) {
+            questionNo = (questionNo * d.getUTCDate()) % 3000
+        }
+        else {
+            questionNo = (questionNo * h * d.getUTCDate()) % 3000
+        }
+            console.log(questionNo)
         }
     }
     
-    
+    // prev()
 
     // JSX
     return (
@@ -238,9 +270,9 @@ const Mainpage = () => {
                                 <img src={imgurl + images[0]} alt="0" onClick={handleClick} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
                             </CircularProgressbarWithChildren>
 
-                            {(click && counter <= 5) &&
+                            {( counter <= 5) &&
                                 <span className={MainpageCSS.overlay}>
-                                    <p className={MainpageCSS.percentage}>{(Math.round((display[0] / sum) * 100))}%</p>
+                                    <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[0] / sum) * 100)): 0}%</p>
                                 </span>
                             }
 
@@ -262,9 +294,9 @@ const Mainpage = () => {
                                 }}>
                                 <img src={imgurl + images[1]} alt="1" onClick={handleClick} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
                             </CircularProgressbarWithChildren>
-                            {(click && counter <= 5) &&
+                            {(counter <= 5) &&
                                 <span className={MainpageCSS.overlay}>
-                                    <p className={MainpageCSS.percentage}>{(Math.round((display[1] / sum) * 100))}%</p>
+                                    <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[1] / sum) * 100)): 0}%</p>
                                 </span>
                             }
                         </div>
@@ -294,9 +326,9 @@ const Mainpage = () => {
                                 }}>
                                 <img src={imgurl + images[2]} alt="2" onClick={handleClick} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
                             </CircularProgressbarWithChildren>
-                            {(click && counter <= 5) &&
+                            {(counter <= 5) &&
                                 <span className={MainpageCSS.overlay}>
-                                    <p className={MainpageCSS.percentage}>{(Math.round((display[2] / sum) * 100))}%</p>
+                                    <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[2] / sum) * 100)) : 0}%</p>
                                 </span>
                             }
                         </div>
@@ -317,15 +349,15 @@ const Mainpage = () => {
                                 }}>
                                 <img src={imgurl + images[3]} alt="3" onClick={handleClick} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
                             </CircularProgressbarWithChildren>
-                            {(click && counter <= 5) &&
+                            {(counter <= 5) &&
                                 <span className={MainpageCSS.overlay}>
-                                    <p className={MainpageCSS.percentage}>{(Math.round((display[3] / sum) * 100))}%</p>
+                                    <p className={MainpageCSS.percentage}>{sum ?( Math.round((display[3] / sum) * 100)): 0}%</p>
                                 </span>
                             }
                         </div>
                     </div>
                 </div>
-                <p className={MainpageCSS.p}>{msg + ' '}
+                <p className={MainpageCSS.p}>{msg + ' ' + votes}
                     {/* <Zoom in={true}> */}
                     {/* <Fab >  */}
                     {/* {<ShareIcon onClick={() => { setShare(true) }} />} */}
