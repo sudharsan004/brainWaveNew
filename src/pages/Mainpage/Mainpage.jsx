@@ -21,7 +21,7 @@ const Mainpage = () => {
     const [votes, setVotes] = useState([0, 0, 0, 0])
     const [selectedImgNo, setSelectedImgNo] = useState('')
     const [dbvotes, setdbvotes] = useState([0, 0, 0, 0])
-    // const [prevq,setprevq]=useState([])
+    const [prevq,setprevq]=useState([])
     const [display, setDisplay] = useState([0, 0, 0, 0])
     const [selected, setSelected] = useState(false)
     const [share, setShare] = useState(false)
@@ -40,19 +40,25 @@ const Mainpage = () => {
     // getCounter() updates count and question no
     function getCounter() {
         var d = new Date();
-        var h = d.getUTCHours();
-        var m = d.getUTCMinutes();
-        var s = d.getUTCSeconds();
+        // d.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
+        var h = d.getHours();
+        var m = d.getMinutes();
+        var s = d.getSeconds();
+        // var now_utc = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(),  d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds());
+        // var sd = new Date(now_utc.getTime() + offset);
         var secondsUntilEndOfDate = 24 * 60 * 60 - h * 60 * 60 - m * 60 - s;
         var questionNo = Math.trunc(secondsUntilEndOfDate / 20)
         var remainder = (secondsUntilEndOfDate % 20)
         if (h === 0) {
             questionNo = (questionNo * d.getUTCDate()) % 3000
+            
         }
         else {
             questionNo = (questionNo * h * d.getUTCDate()) % 3000
+            // alert(d)
+        
         }
-        return [questionNo, remainder]
+        return [questionNo, remainder,h,m,s]
     }
 
 
@@ -83,6 +89,7 @@ const Mainpage = () => {
     }
     // fetch data - first render
     useEffect(() => {
+        prev()
         var qNo = getCounter()[0]
         const ref = firebase.database().ref('data').child(qNo);
         // const refr = firebase.database().ref('data').child(qNo).child('votes').child('0');
@@ -115,8 +122,10 @@ const Mainpage = () => {
     useEffect(() => {
         setInterval(() => {
             let remainder = getCounter()[1];
+            var res = getCounter()
             setCounter(remainder);
-            console.log(votes)
+            setMsg(res)
+            // console.log(votes)
         }, 1000)
     }, [])
 
@@ -153,7 +162,6 @@ const Mainpage = () => {
     // trigger update database when user selects an image
     useEffect(() => {
         if (initial.current) {
-            // prev()
             initial.current = false;
         }
         else {
@@ -183,6 +191,7 @@ const Mainpage = () => {
             if (counter === 0) {
                 setClick(false)
                 setVotes([0,0,0,0])
+                prev()
                 // setSelected(false)
             }
             // if (counter === 6 && click) {
@@ -214,14 +223,14 @@ const Mainpage = () => {
 
 
     function prev(){
+        
         var d = new Date();
-        var h = d.getUTCHours();
-        var m = d.getUTCMinutes();
-        var s = d.getUTCSeconds();
+        var h = d.getHours();
+        var m = d.getMinutes();
+        var s = d.getSeconds();
         var secondsUntilEndOfDate = 24 * 60 * 60 - h * 60 * 60 - m * 60 - s;
         var questionNos=[ ]
-        for (let q=1;q<10;q++){
-        secondsUntilEndOfDate+=20
+        for (let q=1;q<11;q++){
         var questionNo = Math.trunc(secondsUntilEndOfDate / 20)
         if (h === 0) {
             questionNo = (questionNo * d.getUTCDate()) % 3000
@@ -229,11 +238,17 @@ const Mainpage = () => {
         else {
             questionNo = (questionNo * h * d.getUTCDate()) % 3000
         }
-            console.log(questionNo)
+        const ref = firebase.database().ref('data').child(questionNo);
+        ref.on('value', (snapshot) => {
+            const all = snapshot.val();
+            questionNos.push(all)
+        })
+            secondsUntilEndOfDate+=20
         }
+        console.log(questionNos)
     }
     
-    // prev()
+    
 
     // JSX
     return (
