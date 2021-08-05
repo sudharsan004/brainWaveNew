@@ -21,7 +21,7 @@ const Mainpage = () => {
     const [votes, setVotes] = useState([0, 0, 0, 0])
     const [selectedImgNo, setSelectedImgNo] = useState('')
     const [dbvotes, setdbvotes] = useState([0, 0, 0, 0])
-    const [prevq,setprevq]=useState([])
+    const [prevq, setprevq] = useState([])
     const [display, setDisplay] = useState([0, 0, 0, 0])
     const [selected, setSelected] = useState(false)
     const [share, setShare] = useState(false)
@@ -51,14 +51,14 @@ const Mainpage = () => {
         var remainder = (secondsUntilEndOfDate % 20)
         if (h === 0) {
             questionNo = (questionNo * d.getUTCDate()) % 3000
-            
+
         }
         else {
             questionNo = (questionNo * h * d.getUTCDate()) % 3000
             // alert(d)
-        
+
         }
-        return [questionNo, remainder,h,m,s]
+        return [questionNo, remainder, h, m, s]
     }
 
 
@@ -78,14 +78,14 @@ const Mainpage = () => {
     function updateDataBase() {
         var qNo = getCounter()[0]
         firebase.database().ref('data').child(qNo).child('votes').child(selectedImgNo)
-        .set(firebase.database.ServerValue.increment(1))
+            .set(firebase.database.ServerValue.increment(1))
         // ref.on('value',s=>console.log(s.val()))
 
         // ref.update({
         //     ...data,
         //     "votes": votes
         // })
-        
+
     }
     // fetch data - first render
     useEffect(() => {
@@ -111,7 +111,7 @@ const Mainpage = () => {
         ref.on('value', (snapshot) => {
             const all = snapshot.val();
             setVotes(all.votes)
-            console.log('t',all.votes)
+            console.log('t', all.votes)
             setdbvotes(all.votes)
             setData(all);
             setImages(all.images)
@@ -137,9 +137,9 @@ const Mainpage = () => {
             var img_no = target.alt
             var colors = ["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"]
             setSelectedImgColor(p => { colors[img_no] = "#a6bef7"; return colors })
-            
+
             setMsg("result in last 5 Secs");
-            var v =[0,0,0,0]
+            var v = [0, 0, 0, 0]
             // setVotes(prev => { v[img_no] += 1; return v })
             setSelectedImgNo(img_no)
             // updateDataBase()
@@ -190,7 +190,7 @@ const Mainpage = () => {
             }
             if (counter === 0) {
                 setClick(false)
-                setVotes([0,0,0,0])
+                setVotes([0, 0, 0, 0])
                 prev()
                 // setSelected(false)
             }
@@ -200,7 +200,7 @@ const Mainpage = () => {
             //     // updateDataBase()
             //     // updateData()
             // }
-            if(counter ==6 && click){
+            if (counter == 6 && click) {
                 updateDataBase()
                 setSelected(true)
             }
@@ -222,33 +222,34 @@ const Mainpage = () => {
     }, [click, counter])
 
 
-    function prev(){
-        
+    function prev() {
+
         var d = new Date();
         var h = d.getHours();
         var m = d.getMinutes();
         var s = d.getSeconds();
         var secondsUntilEndOfDate = 24 * 60 * 60 - h * 60 * 60 - m * 60 - s;
-        var questionNos=[ ]
-        for (let q=1;q<11;q++){
-        var questionNo = Math.trunc(secondsUntilEndOfDate / 20)
-        if (h === 0) {
-            questionNo = (questionNo * d.getUTCDate()) % 3000
+        var questionNos = []
+        for (let q = 1; q < 6; q++) {
+            var questionNo = Math.trunc(secondsUntilEndOfDate / 20)
+            if (h === 0) {
+                questionNo = (questionNo * d.getUTCDate()) % 3000
+            }
+            else {
+                questionNo = (questionNo * h * d.getUTCDate()) % 3000
+            }
+            const ref = firebase.database().ref('data').child(questionNo);
+            ref.on('value', (snapshot) => {
+                const all = snapshot.val();
+                questionNos.push(all)
+            })
+            secondsUntilEndOfDate += 20
         }
-        else {
-            questionNo = (questionNo * h * d.getUTCDate()) % 3000
-        }
-        const ref = firebase.database().ref('data').child(questionNo);
-        ref.on('value', (snapshot) => {
-            const all = snapshot.val();
-            questionNos.push(all)
-        })
-            secondsUntilEndOfDate+=20
-        }
-        console.log(questionNos)
+        // console.log(questionNos)
+        setprevq(questionNos)
     }
-    
-    
+
+
 
     // JSX
     return (
@@ -285,9 +286,9 @@ const Mainpage = () => {
                                 <img src={imgurl + images[0]} alt="0" onClick={handleClick} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
                             </CircularProgressbarWithChildren>
 
-                            {( counter <= 5) &&
+                            {(counter <= 5) &&
                                 <span className={MainpageCSS.overlay}>
-                                    <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[0] / sum) * 100)): 0}%</p>
+                                    <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[0] / sum) * 100)) : 0}%</p>
                                 </span>
                             }
 
@@ -311,7 +312,7 @@ const Mainpage = () => {
                             </CircularProgressbarWithChildren>
                             {(counter <= 5) &&
                                 <span className={MainpageCSS.overlay}>
-                                    <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[1] / sum) * 100)): 0}%</p>
+                                    <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[1] / sum) * 100)) : 0}%</p>
                                 </span>
                             }
                         </div>
@@ -366,7 +367,7 @@ const Mainpage = () => {
                             </CircularProgressbarWithChildren>
                             {(counter <= 5) &&
                                 <span className={MainpageCSS.overlay}>
-                                    <p className={MainpageCSS.percentage}>{sum ?( Math.round((display[3] / sum) * 100)): 0}%</p>
+                                    <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[3] / sum) * 100)) : 0}%</p>
                                 </span>
                             }
                         </div>
@@ -396,8 +397,56 @@ const Mainpage = () => {
                             >
                                 <TwitterIcon size={25} round />
                             </TwitterShareButton></>) : <ShareIcon size={25} onClick={() => { setShare(true) }} />}</p>
+
+
             </div>
+
+        
+            {/* <div className={`container ${MainpageCSS.container}`}> */}
+            <div style={{ "margin-left": "20px" }} className={`card ${MainpageCSS.card}`}>
+                {prevq.map((post, index) => {
+                    return (
+                        <>
+                            <p>{post.question}</p>
+
+                            <div className="row" style={{ margin:"0",padding:"0"}}>
+
+
+                                {post.images.map((img, index) => {
+                                    return (
+                                        // <div className="col-4">
+                                            <div className={MainpageCSS.imgdiv} style={{ height:"30px", width:"100px", padding:'0' , boxShadow:"none", width: "5%", display: "inline-block" }}>
+                                                <CircularProgressbarWithChildren style={{ display: "inline-block" }}
+                                                    styles={{
+                                                        path: {
+                                                            // Path color
+                                                            stroke: `#ff808c`
+                                                        },
+                                                        // trail: {
+                                                        //     // Trail color
+                                                        //     stroke: selectedImgColor[0],
+                                                        // },
+
+                                                    }}>
+                                                    <img src={imgurl + img} alt="0" style={{padding:"0"}} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
+                                                </CircularProgressbarWithChildren>
+                                            </div>
+                                        // </div>
+                                    )
+                                })}
+
+
+                            </div>
+                        </>
+                    )
+                })}
+                {/* </div> */}
+            </div>
+
+
         </div>
+
+
     )
 }
 
