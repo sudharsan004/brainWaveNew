@@ -7,6 +7,7 @@ import loader from "../../Assets/loader.gif"
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import { FacebookIcon, TwitterIcon } from "react-share";
 import ShareIcon from "@material-ui/icons/Share";
+import './style.css'
 // import Fab from "@material-ui/core/Fab";
 // import Zoom from "@material-ui/core/Zoom";
 
