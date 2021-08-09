@@ -1,4 +1,108 @@
 /* style */
-body{
-    background-color: green;
+/* style */
+#new_card{
+    width: 500px;
+    height: 93vh;
+    position: absolute;
+    /* right: 5%;  */
+    overflow-y: scroll;
+    line-height: 2rem;
+    font-family: 'Ubuntu',sans-serif;
+    color: #7b7b7b;
+    text-shadow: 1px 0px 10px rgba(37, 37, 37, 0.2);
+    font-size: 1.3rem;   
+    border-radius: 22px 0 0 22px;
+    text-align: justify;
+    
+}
+
+#new_img{
+    position: relative;
+    z-index: 999;
+    left: 0;
+    background-color: #ffffff;
+    margin-top: -5px;
+    border: 5px solid #EEEEEE;
+    -webkit-box-shadow: 10px 10px 21px #cfcfcf,
+    -10px -10px 21px #ffffff;
+    box-shadow: 10px 10px 21px #cfcfcf,
+    -10px -10px 21px #ffffff;
+}
+#new_row{
+    flex-wrap: nowrap;
+}
+#new_imgdiv{
+    box-shadow: none;
+    background-color: unset;
+    position: relative;
+    left: 10%;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    margin-left: 17px;
+    /*transform: translateX(-50%);*/
+}
+#new_title{
+    text-align: center;
+    font-family: 'oxygen', sans-serif;
+    text-transform: uppercase;
+    color: #5d5d5d;
+    text-shadow: 1px 0 10px #252525a8;
+    letter-spacing: 3px;
+    font-size: .9rem;
+    opacity: .6;
+}
+
+
+
+/*Scrollbar Design*/
+::-webkit-scrollbar{
+    width: 6px;
+}
+::-webkit-scrollbar-thumb{
+    background-color: #d1d1d1;
+    border-radius: 25px;    
+}
+::-webkit-scrollbar-thumb:hover{
+    background-color: #c1c1c1;
+    border-radius: 25px;   
+}
+::-webkit-scrollbar-track {
+  background: #e5e5e5; 
+  border-radius: 25px;
+}
+
+
+
+/*Responsive design*/
+
+@media only screen and (max-width: 990px){
+    #new_card{
+        width: 400px;
+        height: 80vh;
+        margin-left: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 30px 40px;
+    }
+    #new_imgdiv{
+        margin-left: 0;
+        left: 0;
+    }
+    #new_img{
+        position: relative;
+        margin-left: 55px;
+    }
+
+}
+@media only screen and (max-width: 565px){
+    #new_card{
+        width: 350px;
+        padding: 25px 35px;
+    }
+    #new_imgdiv{
+        margin-left: -15px;
+    }
+    #new_img{
+        margin-left: 70px;
+    }
 }

@@ -8,6 +8,7 @@ import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import { FacebookIcon, TwitterIcon } from "react-share";
 import ShareIcon from "@material-ui/icons/Share";
 import './style.css'
+
 // import Fab from "@material-ui/core/Fab";
 // import Zoom from "@material-ui/core/Zoom";
 
@@ -28,6 +29,7 @@ const Mainpage = () => {
     const [share, setShare] = useState(false)
     const [click, setClick] = useState(false)
     const [sum, setSum] = useState(0);
+    const [toggle, setToggle] = useState(true);
     const initial = useRef(true);
 
 
@@ -91,6 +93,7 @@ const Mainpage = () => {
     // fetch data - first render
     useEffect(() => {
         prev()
+        setMsg("JUDGYFACE")
         var qNo = getCounter()[0]
         const ref = firebase.database().ref('data').child(qNo);
         // const refr = firebase.database().ref('data').child(qNo).child('votes').child('0');
@@ -125,7 +128,7 @@ const Mainpage = () => {
             let remainder = getCounter()[1];
             var res = getCounter()
             setCounter(remainder);
-            setMsg(res)
+            // setMsg(res)
             // console.log(votes)
         }, 1000)
     }, [])
@@ -138,7 +141,6 @@ const Mainpage = () => {
             var img_no = target.alt
             var colors = ["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"]
             setSelectedImgColor(p => { colors[img_no] = "#a6bef7"; return colors })
-
             setMsg("result in last 5 Secs");
             var v = [0, 0, 0, 0]
             // setVotes(prev => { v[img_no] += 1; return v })
@@ -231,7 +233,7 @@ const Mainpage = () => {
         var s = d.getSeconds();
         var secondsUntilEndOfDate = 24 * 60 * 60 - h * 60 * 60 - m * 60 - s;
         var questionNos = []
-        for (let q = 1; q < 6; q++) {
+        for (let q = 1; q < 11; q++) {
             var questionNo = Math.trunc(secondsUntilEndOfDate / 20)
             if (h === 0) {
                 questionNo = (questionNo * d.getUTCDate()) % 3000
@@ -254,200 +256,230 @@ const Mainpage = () => {
 
     // JSX
     return (
-        <div className={`container ${MainpageCSS.container}`}>
-            <div className={`card ${MainpageCSS.card}`}>
-
-                {/* Greetings */}
-                <p className={MainpageCSS.user}>
-                    Hey, {uname}!
-                </p>
-
-                {/* Question */}
-                <span className={MainpageCSS.txtspan}>
-                    <h4 className={MainpageCSS.h1}>{data.question}</h4>
-                </span>
-
-                {/* first row of images (0 and 1) */}
-                <div className="row">
-                    <div className="col-6">
-                        <div className={MainpageCSS.imgdiv}>
-                            <CircularProgressbarWithChildren value={display[0]}
-                                maxValue={sum ? sum : 1}
-                                styles={{
-                                    path: {
-                                        // Path color
-                                        stroke: `#ff808c`
-                                    },
-                                    trail: {
-                                        // Trail color
-                                        stroke: selectedImgColor[0],
-                                    },
-
-                                }}>
-                                <img src={imgurl + images[0]} alt="0" onClick={handleClick} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
-                            </CircularProgressbarWithChildren>
-
-                            {(counter <= 5) &&
-                                <span className={MainpageCSS.overlay}>
-                                    <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[0] / sum) * 100)) : 0}%</p>
-                                </span>
-                            }
-
-                        </div>
-                    </div>
-                    <div className="col-6">
-                        <div className={MainpageCSS.imgdiv}>
-                            <CircularProgressbarWithChildren value={display[1]}
-                                maxValue={sum ? sum : 1}
-                                styles={{
-                                    path: {
-                                        // Path color
-                                        stroke: `#9180ff`
-                                    },
-                                    trail: {
-                                        // Trail color
-                                        stroke: selectedImgColor[1],
-                                    }
-                                }}>
-                                <img src={imgurl + images[1]} alt="1" onClick={handleClick} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
-                            </CircularProgressbarWithChildren>
-                            {(counter <= 5) &&
-                                <span className={MainpageCSS.overlay}>
-                                    <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[1] / sum) * 100)) : 0}%</p>
-                                </span>
-                            }
-                        </div>
-                    </div>
-                </div>
-
-                {/* counter */}
-                <span className={MainpageCSS.span}>
-                    <p className={MainpageCSS.counter}>{('0' + counter).slice(-2)}</p>
-                </span>
-
-                {/* second line of images (2 and 3) */}
-                <div className="row mt-4">
-                    <div className="col-6">
-                        <div className={MainpageCSS.imgdiv}>
-                            <CircularProgressbarWithChildren value={display[2]}
-                                maxValue={(sum) ? sum : 1}
-                                styles={{
-                                    path: {
-                                        // Path color
-                                        stroke: `#84db92`
-                                    },
-                                    trail: {
-                                        // Trail color
-                                        stroke: selectedImgColor[2],
-                                    }
-                                }}>
-                                <img src={imgurl + images[2]} alt="2" onClick={handleClick} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
-                            </CircularProgressbarWithChildren>
-                            {(counter <= 5) &&
-                                <span className={MainpageCSS.overlay}>
-                                    <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[2] / sum) * 100)) : 0}%</p>
-                                </span>
-                            }
-                        </div>
-                    </div>
-                    <div className="col-6">
-                        <div className={MainpageCSS.imgdiv}>
-                            <CircularProgressbarWithChildren value={display[3]}
-                                maxValue={sum ? sum : 1}
-                                styles={{
-                                    path: {
-                                        // Path color
-                                        stroke: `#f2dc5e`
-                                    },
-                                    trail: {
-                                        // Trail color
-                                        stroke: selectedImgColor[3],
-                                    }
-                                }}>
-                                <img src={imgurl + images[3]} alt="3" onClick={handleClick} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
-                            </CircularProgressbarWithChildren>
-                            {(counter <= 5) &&
-                                <span className={MainpageCSS.overlay}>
-                                    <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[3] / sum) * 100)) : 0}%</p>
-                                </span>
-                            }
-                        </div>
-                    </div>
-                </div>
-                <p className={MainpageCSS.p}>{msg + ' ' + votes}
-                    {/* <Zoom in={true}> */}
-                    {/* <Fab >  */}
-                    {/* {<ShareIcon onClick={() => { setShare(true) }} />} */}
-                    {/* </Fab> */}
-                    {/* </Zoom> */}
-                    {share ?
-                        (<><FacebookShareButton
-                            url={"https://judgyface.com"}
-                            quote={"Judging people"}
-                            hashtag={"#gaming"}
-                            description={"dsc"}
-                            className="share-button"
-                        >
-                            <FacebookIcon size={25} round />
-                        </FacebookShareButton>
-                            <span> </span>
-                            <TwitterShareButton
-                                title={"Judgy Face"}
-                                url={"https://judgyface.com"}
-                                hashtags={["gaming", "judgying"]}
-                            >
-                                <TwitterIcon size={25} round />
-                            </TwitterShareButton></>) : <ShareIcon size={25} onClick={() => { setShare(true) }} />}</p>
+        <>
 
 
-            </div>
 
-        
-            {/* <div className={`container ${MainpageCSS.container}`}> */}
-            <div style={{ "margin-left": "20px" }} className={`card ${MainpageCSS.card}`}>
-                {prevq.map((post, index) => {
-                    return (
+
+            <div className={`container ${MainpageCSS.container}`}>
+                {/* <button className="btn btn-primary" onClick={setToggle(p=>!p)}>toggle</button> */}
+                {toggle ?
+                    (
+                        <div className={`card ${MainpageCSS.card}`} >
+                            {/* Greetings */}
+                            <p className={MainpageCSS.user}>
+                                Hey, {uname}
+                            </p>
+
+                            {/* Question */}
+                            <span className={MainpageCSS.txtspan}>
+                                <h4 className={MainpageCSS.h1}>{data.question}</h4>
+                            </span>
+
+                            {/* first row of images (0 and 1) */}
+                            <div className="row">
+                                <div className="col-6">
+                                    <div className={MainpageCSS.imgdiv}>
+                                        <CircularProgressbarWithChildren value={display[0]}
+                                            maxValue={sum ? sum : 1}
+                                            styles={{
+                                                path: {
+                                                    // Path color
+                                                    stroke: `#ff808c`
+                                                },
+                                                trail: {
+                                                    // Trail color
+                                                    stroke: selectedImgColor[0],
+                                                },
+
+                                            }}>
+                                            <img src={imgurl + images[0]} alt="0" onClick={handleClick} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
+                                        </CircularProgressbarWithChildren>
+
+                                        {(counter <= 5) &&
+                                            <span className={MainpageCSS.overlay}>
+                                                <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[0] / sum) * 100)) : 0}%</p>
+                                            </span>
+                                        }
+
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className={MainpageCSS.imgdiv}>
+                                        <CircularProgressbarWithChildren value={display[1]}
+                                            maxValue={sum ? sum : 1}
+                                            styles={{
+                                                path: {
+                                                    // Path color
+                                                    stroke: `#9180ff`
+                                                },
+                                                trail: {
+                                                    // Trail color
+                                                    stroke: selectedImgColor[1],
+                                                }
+                                            }}>
+                                            <img src={imgurl + images[1]} alt="1" onClick={handleClick} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
+                                        </CircularProgressbarWithChildren>
+                                        {(counter <= 5) &&
+                                            <span className={MainpageCSS.overlay}>
+                                                <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[1] / sum) * 100)) : 0}%</p>
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* counter */}
+                            <span className={MainpageCSS.span}>
+                                <p className={MainpageCSS.counter}>{('0' + counter).slice(-2)}</p>
+                            </span>
+
+                            {/* second line of images (2 and 3) */}
+                            <div className="row mt-4">
+                                <div className="col-6">
+                                    <div className={MainpageCSS.imgdiv}>
+                                        <CircularProgressbarWithChildren value={display[2]}
+                                            maxValue={(sum) ? sum : 1}
+                                            styles={{
+                                                path: {
+                                                    // Path color
+                                                    stroke: `#84db92`
+                                                },
+                                                trail: {
+                                                    // Trail color
+                                                    stroke: selectedImgColor[2],
+                                                }
+                                            }}>
+                                            <img src={imgurl + images[2]} alt="2" onClick={handleClick} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
+                                        </CircularProgressbarWithChildren>
+                                        {(counter <= 5) &&
+                                            <span className={MainpageCSS.overlay}>
+                                                <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[2] / sum) * 100)) : 0}%</p>
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className={MainpageCSS.imgdiv}>
+                                        <CircularProgressbarWithChildren value={display[3]}
+                                            maxValue={sum ? sum : 1}
+                                            styles={{
+                                                path: {
+                                                    // Path color
+                                                    stroke: `#f2dc5e`
+                                                },
+                                                trail: {
+                                                    // Trail color
+                                                    stroke: selectedImgColor[3],
+                                                }
+                                            }}>
+                                            <img src={imgurl + images[3]} alt="3" onClick={handleClick} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
+                                        </CircularProgressbarWithChildren>
+                                        {(counter <= 5) &&
+                                            <span className={MainpageCSS.overlay}>
+                                                <p className={MainpageCSS.percentage}>{sum ? (Math.round((display[3] / sum) * 100)) : 0}%</p>
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <p className={MainpageCSS.p}> <b>{msg}</b>
+                                {/* <Zoom in={true}> */}
+                                {/* <Fab >  */}
+                                {/* {<ShareIcon onClick={() => { setShare(true) }} />} */}
+                                {/* </Fab> */}
+                                {/* </Zoom> */}
+                                <br /><br />
+                                {5 ?
+                                    (<><FacebookShareButton
+                                        url={"https://judgyface.com"}
+                                        quote={"Judging people"}
+                                        hashtag={"#gaming"}
+                                        description={"dsc"}
+                                        className="share-button"
+                                    >
+                                        <FacebookIcon size={25} round />
+                                    </FacebookShareButton>
+                                        <span> </span>
+                                        <TwitterShareButton
+                                            title={"Judgy Face"}
+                                            url={"https://judgyface.com"}
+                                            hashtags={["gaming", "judgying"]}
+                                        >
+                                            <TwitterIcon size={25} round />
+                                        </TwitterShareButton></>) : <ShareIcon size={25} onClick={() => { setShare(true) }} />}
+                                    
+                                <span style={{marginLeft:"10px"}} onClick={() => { setToggle(p => !p) }}> {toggle ? 'Previous Questions' : 'Live Question'} </span>
+                            </p>
+
+
+
+                        </div>)
+
+                    : (
                         <>
-                            <p>{post.question}</p>
-
-                            <div className="row" style={{ margin:"0",padding:"0"}}>
-
-
-                                {post.images.map((img, index) => {
+                            <div className={`card ${MainpageCSS.card}`} id="new_card">
+                            {/* <p className={MainpageCSS.user}>
+                                Hey, {uname}
+                            </p> */}
+                                <p id="new_title">Previous Questions</p>
+                                {prevq.map((post, index) => {
                                     return (
-                                        // <div className="col-4">
-                                            <div className={MainpageCSS.imgdiv} style={{ height:"30px", width:"100px", padding:'0' , boxShadow:"none", width: "5%", display: "inline-block" }}>
-                                                <CircularProgressbarWithChildren style={{ display: "inline-block" }}
-                                                    styles={{
-                                                        path: {
-                                                            // Path color
-                                                            stroke: `#ff808c`
-                                                        },
-                                                        // trail: {
-                                                        //     // Trail color
-                                                        //     stroke: selectedImgColor[0],
-                                                        // },
+                                        <>
+                                            <p>{post.question}</p>
 
-                                                    }}>
-                                                    <img src={imgurl + img} alt="0" style={{padding:"0"}} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
-                                                </CircularProgressbarWithChildren>
+                                            <div className="row" id="new_row" style={{ margin: "0", padding: "0" }}>
+
+                                                {post.images.map((img, index) => {
+                                                    let sum = post.votes.reduce((a, b) => {
+                                                        return (a + b)
+                                                    });
+                                                    let style = (sum && post.votes[index] === Math.max(...post.votes)) ? { padding: '0', border: "5px solid #84db92" } : { padding: '0', border: "5px solid #EEEEEE" }
+                                                    return (
+
+                                                        <div className={MainpageCSS.imgdiv} id="new_imgdiv" style={{ height: "30px", boxShadow: "none", width: "90px" }}>
+                                                            <img src={imgurl + img} alt="0" id="new_img" style={style} onError={e => e.target.src = loader} className={MainpageCSS.img} draggable="false" />
+                                                        </div>
+                                                    )
+                                                })}
+
+
                                             </div>
-                                        // </div>
+                                        </>
                                     )
                                 })}
-
-
+                           
+                            <p className={MainpageCSS.p}>
+                            {share ?
+                                    (<><FacebookShareButton
+                                        url={"https://judgyface.com"}
+                                        quote={"Judging people"}
+                                        hashtag={"#gaming"}
+                                        description={"dsc"}
+                                        className="share-button"
+                                    >
+                                        <FacebookIcon size={25} round />
+                                    </FacebookShareButton>
+                                        <span> </span>
+                                        <TwitterShareButton
+                                            title={"Judgy Face"}
+                                            url={"https://judgyface.com"}
+                                            hashtags={["gaming", "judgying"]}
+                                        >
+                                            <TwitterIcon size={25} round />
+                                        </TwitterShareButton></>) : <ShareIcon size={25} onClick={() => { setShare(true) }} />}
+                                        <span onClick={() => { setToggle(p => !p) }}>{toggle ? ' Previous Questions' : ' Live Question'} </span>
+                            </p>
                             </div>
-                        </>
-                    )
-                })}
-                {/* </div> */}
+                    </>
+
+                    )}
+
             </div>
 
 
-        </div>
 
-
+        </>
     )
 }
 
